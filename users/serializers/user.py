@@ -36,7 +36,7 @@ class TokenObtainPairSerializer(TokenObtainSerializer):  # noqa
 class UserRegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ["id", "first_name", "last_name", "phone_number"]
+        fields = ["id", "first_name", "last_name", "phone_number", "profile_picture"]
 
     def to_representation(self, instance):
         data = instance.tokens()
