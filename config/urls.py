@@ -24,12 +24,12 @@ from rest_framework import permissions
 
 schema_view = get_schema_view(
     openapi.Info(
-        title="Airbnb-uz API system by P10",
+        title="My Taxi",
         default_version="v1",
-        description="Airbnb  API",
+        description="My-taxi  API",
         terms_of_service="https://www.google.com/policies/terms/",
         contact=openapi.Contact(email="mr006developer@gmail.com"),
-        license=openapi.License(name="PDP License"),
+        license=openapi.License(name="oktamov License"),
     ),
     public=True,
     permission_classes=[permissions.AllowAny],
@@ -44,6 +44,7 @@ swagger_urls = [
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("users/", include("users.urls")),
+    path("drivers/", include("drivers.urls")),
 ]
 
 urlpatterns += swagger_urls

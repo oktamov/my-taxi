@@ -42,12 +42,14 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     "django_filters",
-    "drf_yasg",
-    "corsheaders",
+    'drf_yasg',
+    'corsheaders',
+
 
     # local
     'users',
-    'common'
+    'common',
+    'drivers',
 ]
 
 MIDDLEWARE = [
@@ -161,16 +163,11 @@ CORS_ALLOW_ALL_ORIGINS = True
 
 DEFAULT_COUNTRY_CODE = "UZ"
 
-STRIPE_SECRET_KEY = env("STRIPE_SECRET_KEY")
-STRIPE_WEBHOOK_SECRET = env("STRIPE_WEBHOOK_SECRET")
-
-CHECKOUT_SUCCESS_URL = env("CHECKOUT_SUCCESS_URL")
-CHECKOUT_FAILED_URL = env("CHECKOUT_FAILED_URL")
 
 VERIFICATION_CODE_LIFETIME = 2
 SMS_SERVICE_EMAIL = env("SMS_SERVICE_EMAIL")
 SMS_SERVICE_PASSWORD = env("SMS_SERVICE_PASSWORD")
-SMS_SERVICE_BASE_URL = 'http://localhost:8000'
+SMS_SERVICE_BASE_URL = ''
 
 SITE_URL = "https://"
 

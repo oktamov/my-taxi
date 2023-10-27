@@ -11,13 +11,8 @@ class Country(models.Model):
         return self.name
 
 
-class Region(MPTTModel):
+class Region(models.Model):
     name = models.CharField(max_length=100)
-    country = models.ForeignKey(Country, on_delete=models.CASCADE, related_name="regions")
-    parent = TreeForeignKey("self", on_delete=models.CASCADE, null=True, blank=True, related_name="children")
-
-    class MPTTMeta:
-        order_insertion_by = ["name"]
 
     def __str__(self):
         return self.name

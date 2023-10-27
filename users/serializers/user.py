@@ -12,7 +12,7 @@ from utils.verification import check_verification_code, get_verification_type
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ("id", "first_name", "last_name", "phone_number", "email", "birth_date", "profile_picture")
+        fields = ("id", "first_name", "last_name", "phone_number", "birth_date", "profile_picture")
 
 
 class TokenObtainPairSerializer(TokenObtainSerializer):  # noqa
@@ -34,6 +34,8 @@ class TokenObtainPairSerializer(TokenObtainSerializer):  # noqa
 
 
 class UserRegisterSerializer(serializers.ModelSerializer):
+    profile_picture = serializers.ImageField()
+
     class Meta:
         model = User
         fields = ["id", "first_name", "last_name", "phone_number", "profile_picture"]
