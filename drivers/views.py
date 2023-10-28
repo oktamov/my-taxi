@@ -1,8 +1,9 @@
-from django.db.models import Prefetch
 from rest_framework import generics, permissions
+from rest_framework.exceptions import NotFound
 
+from permissions.custom_permission import IsOwnerOrReadOnly
 from .models import Driver
-from .serializers import DriverCreateSerializer, DriverSerializer
+from .serializers import DriverCreateSerializer, DriverSerializer, DriverUpdateSerializer
 
 
 class DriverCreateView(generics.CreateAPIView):
@@ -22,3 +23,14 @@ class DriverListView(generics.ListAPIView):
 
     def get_queryset(self):
         return Driver.objects.select_related('user', 'from_region', 'to_region')
+
+
+class DriverProfileView(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = DriverUpdateSerializer
+    permission_classes = [IsOwnerOrReadOnly]
+
+    def get_object(self):
+        try:
+            return Driver.objects.get(user=self.request.user)
+        except Driver.DoesNotExist:
+            raise NotFound("Haydovchilikka ariza topshirgan profil mavjud emas.")

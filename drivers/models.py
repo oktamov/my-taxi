@@ -11,7 +11,9 @@ class Driver(models.Model):
     price = models.IntegerField(null=True, blank=True)
     car = models.CharField(max_length=55)
     car_number = models.CharField(max_length=8)
+    seats = models.IntegerField(null=True, blank=True)
     status = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.user.full_name} {self.from_region}-{self.to_region}"
+

@@ -1,17 +1,17 @@
 from rest_framework import serializers
 
 from common.models import Region
+from users.models.announcement import Announcement
 from users.serializers import UserSerializer
-from .models import Driver
 
 
-class DriverCreateSerializer(serializers.ModelSerializer):
+class AnnouncementCreateSerializer(serializers.ModelSerializer):
     from_region = serializers.CharField()
     to_region = serializers.CharField()
 
     class Meta:
-        model = Driver
-        fields = ('from_region', 'to_region', 'price', 'car', 'car_number', 'seats', 'status')
+        model = Announcement
+        fields = ('from_region', 'to_region', 'price', 'seats', 'when', 'status')
 
     def create(self, validated_data):
         user = self.context['request'].user
@@ -21,16 +21,15 @@ class DriverCreateSerializer(serializers.ModelSerializer):
         validated_data['from_region'] = from_regions
         validated_data['to_region'] = to_regions
         driver = super().create(validated_data)
-        user.status = 'driver'
         return driver
 
 
-class DriverSerializer(serializers.ModelSerializer):
+class AnnouncementSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
 
     class Meta:
-        model = Driver
-        fields = ('id', 'from_region', 'to_region', 'price', 'car', 'car_number', 'seats', 'status', 'user')
+        model = Announcement
+        fields = ('id', 'from_region', 'to_region', 'price', 'seats', 'when', 'status', 'user')
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
@@ -39,19 +38,18 @@ class DriverSerializer(serializers.ModelSerializer):
         return data
 
 
-class DriverUpdateSerializer(serializers.ModelSerializer):
+class AnnouncementUpdateSerializer(serializers.ModelSerializer):
     from_region = serializers.CharField()
     to_region = serializers.CharField()
 
     class Meta:
-        model = Driver
-        fields = ('from_region', 'to_region', 'price', 'car', 'car_number', 'seats', 'status')
+        model = Announcement
+        fields = ('from_region', 'to_region', 'price', 'seats', 'when', 'status')
 
     def update(self, instance, validated_data):
         instance.price = validated_data.get('price', instance.price)
-        instance.car = validated_data.get('car', instance.car)
-        instance.car_number = validated_data.get('car_number', instance.car_number)
         instance.seats = validated_data.get('seats', instance.seats)
+        instance.when = validated_data.get('when', instance.when)
         instance.status = validated_data.get('status', instance.status)
 
         from_region_name = validated_data.get('from_region')
@@ -67,4 +65,3 @@ class DriverUpdateSerializer(serializers.ModelSerializer):
 
         instance.save()
         return instance
-

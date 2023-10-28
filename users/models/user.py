@@ -9,6 +9,10 @@ from utils.regex import phone_regex
 
 
 class User(AbstractUser):
+    STATUS = (
+        ('passenger', 'passenger'),
+        ('driver', 'driver')
+    )
     username = models.CharField(max_length=150, unique=True, null=True, blank=True)
     phone_number = models.CharField(
         validators=[phone_regex],
@@ -26,7 +30,8 @@ class User(AbstractUser):
         db_column="country_code",
     )
     profile_picture = models.ImageField(upload_to="profile_pictures", null=True, blank=True)
-    birth_date = models.DateField(null=True, blank=True)
+
+    status = models.CharField(max_length=20, choices=STATUS, default='passenger')
 
     USERNAME_FIELD = "phone_number"
 
