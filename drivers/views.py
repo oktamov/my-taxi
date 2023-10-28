@@ -1,7 +1,10 @@
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics, permissions
 from rest_framework.exceptions import NotFound
 
 from permissions.custom_permission import IsOwnerOrReadOnly
+from utils.paginations import CustomPageNumberPagination
+from .filters import DriverFilter
 from .models import Driver
 from .serializers import DriverCreateSerializer, DriverSerializer, DriverUpdateSerializer
 
@@ -20,6 +23,9 @@ class DriverCreateView(generics.CreateAPIView):
 class DriverListView(generics.ListAPIView):
     serializer_class = DriverSerializer
     permission_classes = [permissions.IsAuthenticated]
+    pagination_class = CustomPageNumberPagination
+    filter_backends = (DjangoFilterBackend,)
+    filterset_class = DriverFilter
 
     def get_queryset(self):
         return Driver.objects.select_related('user', 'from_region', 'to_region')
