@@ -15,6 +15,10 @@ class DriverCreateSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         user = self.context['request'].user
+
+        if user.status == 'driver':
+            raise serializers.ValidationError('You are already a driver')
+
         validated_data['user'] = user
         from_regions, _ = Region.objects.get_or_create(name=validated_data.pop('from_region'))
         to_regions, _ = Region.objects.get_or_create(name=validated_data.pop('to_region'))
@@ -22,6 +26,7 @@ class DriverCreateSerializer(serializers.ModelSerializer):
         validated_data['to_region'] = to_regions
         driver = super().create(validated_data)
         user.status = 'driver'
+        user.save()
         return driver
 
 
@@ -68,3 +73,9 @@ class DriverUpdateSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
+    def delete(self, instance):
+        user = instance.user
+        user.status = 'passenger'
+        user.save()
+
+        instance.delete()

@@ -1,8 +1,10 @@
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import generics, permissions
+from rest_framework import generics, permissions, status
 from rest_framework.exceptions import NotFound
+from rest_framework.response import Response
 
 from permissions.custom_permission import IsOwnerOrReadOnly
+from users.models import User
 from utils.paginations import CustomPageNumberPagination
 from .filters import DriverFilter
 from .models import Driver
@@ -40,3 +42,10 @@ class DriverProfileView(generics.RetrieveUpdateDestroyAPIView):
             return Driver.objects.get(user=self.request.user)
         except Driver.DoesNotExist:
             raise NotFound("Haydovchilikka ariza topshirgan profil mavjud emas.")
+
+    def delete(self, request, *args, **kwargs):
+        driver = Driver.objects.get(user=self.request.user)
+        driver.delete()
+        self.request.user.status = "passenger"
+        self.request.user.save()
+        return Response(status=status.HTTP_204_NO_CONTENT)
